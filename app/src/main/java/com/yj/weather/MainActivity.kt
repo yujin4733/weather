@@ -1,4 +1,4 @@
-package com.yj.myapplication
+package com.yj.weather
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

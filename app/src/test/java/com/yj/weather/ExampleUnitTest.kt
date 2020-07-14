@@ -1,4 +1,4 @@
-package com.yj.myapplication
+package com.yj.weather
 
 import org.junit.Test
 
