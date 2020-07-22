@@ -60,7 +60,7 @@ class WeatherActivity : AppCompatActivity() {
             if (weather != null) {
                 showWeatherInfo(weather)
             } else {
-                "无法成功获取天气信息".showToast()
+                getString(R.string.unable_to_get_weather_info).showToast()
                 result.exceptionOrNull()?.printStackTrace()
             }
             swipeRefresh.isRefreshing = false
