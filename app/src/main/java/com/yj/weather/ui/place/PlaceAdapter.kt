@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.android.arouter.launcher.ARouter
 import com.yj.weather.R
 import com.yj.weather.logic.model.Place
 import com.yj.weather.ui.weather.WeatherActivity
@@ -39,12 +39,18 @@ class PlaceAdapter(private val fragment:PlaceFragment,private val placeList:List
                 activity.viewModel.placeName = place.name
                 activity.refreshWeather()
             }else{
-                val intent = Intent(parent.context,WeatherActivity::class.java).apply {
-                    putExtra("location_lng",place.location.lng)
-                    putExtra("location_lat",place.location.lat)
-                    putExtra("place_name",place.name)
-                }
-                fragment.startActivity(intent)
+//                val intent = Intent(parent.context,WeatherActivity::class.java).apply {
+//                    putExtra("location_lng",place.location.lng)
+//                    putExtra("location_lat",place.location.lat)
+//                    putExtra("place_name",place.name)
+//                }
+//                fragment.startActivity(intent)
+
+                ARouter.getInstance().build("/weather/WeatherActivity")
+                    .withString("locationLng",place.location.lng)
+                    .withString("locationLat",place.location.lat)
+                    .withString("placeName",place.name)
+                    .navigation()
                 fragment.activity?.finish()
             }
             fragment.viewModel.savePlace(place)

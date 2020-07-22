@@ -1,6 +1,7 @@
 package com.yj.weather.ui.weather
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import com.alibaba.android.arouter.facade.annotation.Autowired
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.yj.weather.R
 import com.yj.weather.logic.Repository.refreshWeather
 import com.yj.weather.logic.model.Weather
@@ -27,9 +30,21 @@ import kotlinx.android.synthetic.main.now.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Route(path = "/weather/WeatherActivity")
 class WeatherActivity : AppCompatActivity() {
 
     val viewModel by lazy { ViewModelProviders.of(this).get(WeatherViewModel::class.java) }
+
+    companion object {
+        fun start(context: Context, locationLng: String, locationLat: String,placeName: String) {
+            val intent = Intent(context, WeatherActivity::class.java).apply {
+                putExtra("locationLng", locationLng)
+                putExtra("locationLat", locationLat)
+                putExtra("placeName", placeName)
+            }
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
