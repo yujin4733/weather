@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.launcher.ARouter
 import com.yj.weather.R
+import com.yj.weather.arouterservice.WeatherArouterServiceWarp
 import com.yj.weather.logic.model.Place
 import com.yj.weather.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -45,12 +46,7 @@ class PlaceAdapter(private val fragment:PlaceFragment,private val placeList:List
 //                    putExtra("place_name",place.name)
 //                }
 //                fragment.startActivity(intent)
-
-                ARouter.getInstance().build("/weather/WeatherActivity")
-                    .withString("locationLng",place.location.lng)
-                    .withString("locationLat",place.location.lat)
-                    .withString("placeName",place.name)
-                    .navigation()
+                WeatherArouterServiceWarp.instance.start(parent.context,place.location.lng,place.location.lat,place.name)
                 fragment.activity?.finish()
             }
             fragment.viewModel.savePlace(place)
