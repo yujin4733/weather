@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.yj.weather.ARouterPath
 import com.yj.weather.R
 import com.yj.weather.logic.Repository.refreshWeather
 import com.yj.weather.logic.model.Weather
@@ -31,17 +32,15 @@ import kotlinx.android.synthetic.main.now.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-//@Route(path = "/weather/WeatherActivity")
+@Route(path = ARouterPath.WEATHER_ACTIVITY_URL)
 class WeatherActivity : AppCompatActivity() {
 
-    @JvmField
     @Autowired(name = "locationLng")
-    var lng: String = ""
-//
-    @JvmField
+    lateinit var lng: String
+
     @Autowired(name = "locationLat")
-    var lat: String = ""
-//
+    lateinit var lat: String
+
 //    @JvmField
     @Autowired(name = "placeName")
     lateinit var place: String

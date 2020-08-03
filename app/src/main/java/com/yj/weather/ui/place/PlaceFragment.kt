@@ -1,6 +1,5 @@
 package com.yj.weather.ui.place
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.android.arouter.launcher.ARouter
+import com.yj.weather.ARouterPath
 import com.yj.weather.MainActivity
 import com.yj.weather.R
-import com.yj.weather.ui.weather.WeatherActivity
 import com.yj.weather.util.LogUtil
 import com.yj.weather.util.showToast
 import kotlinx.android.synthetic.main.fragment_place.*
-import kotlin.math.log
 
 class PlaceFragment : Fragment() {
 
@@ -38,12 +37,17 @@ class PlaceFragment : Fragment() {
         LogUtil.e("tag",isb.toString())
         if (isb) {
             val place = viewModel.getSavedPlace()
-            val intent = Intent(context, WeatherActivity::class.java).apply {
-                putExtra("location_lng", place.location.lng)
-                putExtra("location_lat", place.location.lat)
-                putExtra("place_name", place.name)
-            }
-            startActivity(intent)
+//            val intent = Intent(context, WeatherActivity::class.java).apply {
+//                putExtra("locationLng", place.location.lng)
+//                putExtra("locationLat", place.location.lat)
+//                putExtra("placeName", place.name)
+//            }
+//            startActivity(intent)
+            ARouter.getInstance().build(ARouterPath.WEATHER_ACTIVITY_URL)
+                .withString("locationLng",place.location.lng)
+                .withString("locationLat",place.location.lat)
+                .withString("placeName",place.name)
+                .navigation()
             activity?.finish()
             return
         }

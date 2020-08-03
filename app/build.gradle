@@ -28,22 +28,37 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"//, "x86","arm64-v8a","x86_64"
+        }
     }
 
     signingConfigs {
-        release {
+        debug {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
-//            storeFile file('/mvvm.jks')
-//            storePassword 'mvvm123'
-//            keyAlias = 'key0'
-//            keyPassword 'mvvm123'
         }
     }
 
     buildTypes {
+        debug {
+            resValue("string", "app_name", "weather_debug")
+//            buildConfigField("String", "YW_APP_KEY", "\"123456\"")
+            buildConfigField "boolean", "LOG_DEBUG", "true"//是否输出LOG信息
+
+            manifestPlaceholders = [
+                    AMAP_KEY: "426c3b9db9b72a581a5108655608b971"
+            ]
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+
+
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -86,5 +101,8 @@ dependencies {
 
     implementation 'com.alibaba:arouter-api:1.5.0'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
+
+    //高德定位
+    implementation 'com.amap.api:location:latest.integration'
 
 }
