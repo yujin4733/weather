@@ -29,6 +29,14 @@
             android:hint="@string/input_address"
             android:background="@drawable/search_bg"/>
     </FrameLayout>
+    <Button
+        android:id="@+id/btnCurrentPosition"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="当前位置"
+        android:layout_below="@+id/actionBarLayout"
+        android:gravity="center"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

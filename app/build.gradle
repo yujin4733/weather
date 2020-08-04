@@ -47,11 +47,13 @@ android {
     buildTypes {
         debug {
             resValue("string", "app_name", "weather_debug")
-//            buildConfigField("String", "YW_APP_KEY", "\"123456\"")
+            buildConfigField("String", "caiyun_token", keystoreProperties['caiyun_token'])
+
             buildConfigField "boolean", "LOG_DEBUG", "true"//是否输出LOG信息
 
             manifestPlaceholders = [
-                    AMAP_KEY: "426c3b9db9b72a581a5108655608b971"
+//                    AMAP_KEY: "426c3b9db9b72a581a5108655608b971"
+                    AMAP_KEY: keystoreProperties['amap_key']
             ]
             minifyEnabled false
             shrinkResources false

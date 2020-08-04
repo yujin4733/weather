@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.launcher.ARouter
-import com.yj.weather.ARouterPath
+import com.yj.weather.Contract
 import com.yj.weather.MainActivity
 import com.yj.weather.R
 import com.yj.weather.util.LogUtil
@@ -33,9 +33,7 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val isb = activity is MainActivity && viewModel.isPlaceSaved()
-        LogUtil.e("tag",isb.toString())
-        if (isb) {
+        if (activity is MainActivity && viewModel.isPlaceSaved()) {
             val place = viewModel.getSavedPlace()
 //            val intent = Intent(context, WeatherActivity::class.java).apply {
 //                putExtra("locationLng", place.location.lng)
@@ -43,7 +41,7 @@ class PlaceFragment : Fragment() {
 //                putExtra("placeName", place.name)
 //            }
 //            startActivity(intent)
-            ARouter.getInstance().build(ARouterPath.WEATHER_ACTIVITY_URL)
+            ARouter.getInstance().build(Contract.WEATHER_ACTIVITY_URL)
                 .withString("locationLng",place.location.lng)
                 .withString("locationLat",place.location.lat)
                 .withString("placeName",place.name)
@@ -66,6 +64,14 @@ class PlaceFragment : Fragment() {
                 viewModel.placeList.clear()
                 adapter.notifyDataSetChanged()
             }
+        }
+
+        btnCurrentPosition.setOnClickListener {
+            ARouter.getInstance().build(Contract.WEATHER_ACTIVITY_URL)
+                .withString("locationLng","")
+                .withString("locationLat","")
+                .withString("placeName","当前位置")
+                .navigation()
         }
 
         viewModel.placeLiveData.observe(this, Observer { result ->

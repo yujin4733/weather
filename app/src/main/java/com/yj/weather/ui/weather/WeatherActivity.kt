@@ -3,25 +3,25 @@ package com.yj.weather.ui.weather
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.yj.weather.ARouterPath
+import com.yj.weather.Contract
 import com.yj.weather.R
-import com.yj.weather.logic.Repository.refreshWeather
+import com.yj.weather.logic.location.LocationService
+import com.yj.weather.logic.location.PlaceInterface
+import com.yj.weather.logic.model.Place
 import com.yj.weather.logic.model.Weather
 import com.yj.weather.logic.model.getSky
 import com.yj.weather.util.showToast
@@ -32,8 +32,9 @@ import kotlinx.android.synthetic.main.now.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@Route(path = ARouterPath.WEATHER_ACTIVITY_URL)
-class WeatherActivity : AppCompatActivity() {
+@Route(path = Contract.WEATHER_ACTIVITY_URL)
+class WeatherActivity : AppCompatActivity(),PlaceInterface {
+
 
     @Autowired(name = "locationLng")
     lateinit var lng: String
@@ -41,14 +42,14 @@ class WeatherActivity : AppCompatActivity() {
     @Autowired(name = "locationLat")
     lateinit var lat: String
 
-//    @JvmField
+    //    @JvmField
     @Autowired(name = "placeName")
     lateinit var place: String
 
     val viewModel by lazy { ViewModelProviders.of(this).get(WeatherViewModel::class.java) }
 
     companion object {
-        fun start(context: Context, locationLng: String, locationLat: String,placeName: String) {
+        fun start(context: Context, locationLng: String, locationLat: String, placeName: String) {
             val intent = Intent(context, WeatherActivity::class.java).apply {
                 putExtra("locationLng", locationLng)
                 putExtra("locationLat", locationLat)
@@ -67,11 +68,11 @@ class WeatherActivity : AppCompatActivity() {
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.statusBarColor = Color.TRANSPARENT
-
         setContentView(R.layout.activity_weather)
+
+        initView()
         initData()
     }
-
 
     private fun initData() {
         if (viewModel.locationLng.isEmpty()) {
@@ -94,15 +95,22 @@ class WeatherActivity : AppCompatActivity() {
             }
             swipeRefresh.isRefreshing = false
         })
+        if(viewModel.placeName.equals("当前位置")){
+            LocationService.startLocation()
+        }else{
+            refreshWeather()
+        }
+    }
 
+
+    private fun initView() {
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-        refreshWeather()
         swipeRefresh.setOnRefreshListener { refreshWeather() }
-        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
 
         navBtn.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
+
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
 
@@ -125,7 +133,19 @@ class WeatherActivity : AppCompatActivity() {
 
 
         })
+
+        LocationService.setLocationListener(this)
     }
+
+
+    override fun setPlace(place: Place) {
+        viewModel.locationLng = place.location.lng
+        viewModel.locationLat = place.location.lat
+        viewModel.placeName = place.name
+        viewModel.savePlace(place)
+        refreshWeather()
+    }
+
 
     fun refreshWeather() {
         viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
@@ -174,5 +194,12 @@ class WeatherActivity : AppCompatActivity() {
         ultravioletText.text = lifeIndex.ultraviolet[0].desc
         carWashingText.text = lifeIndex.carWashing[0].desc
         weatherLayout.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocationService.stopLocation()
+        LocationService.removeListerer()
+
     }
 }

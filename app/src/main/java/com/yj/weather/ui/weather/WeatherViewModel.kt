@@ -5,6 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.yj.weather.logic.Repository
 import com.yj.weather.logic.model.Location
+import com.yj.weather.logic.model.Place
 
 class WeatherViewModel: ViewModel() {
     private val locationLiveData = MutableLiveData<Location>()
@@ -20,4 +21,7 @@ class WeatherViewModel: ViewModel() {
     fun refreshWeather(lng:String,lat:String){
         locationLiveData.value = Location(lng,lat)
     }
+
+    fun savePlace(place: Place) = Repository.savePlace(place)
+
 }

@@ -4,10 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.yj.weather.logic.Repository
+import com.yj.weather.logic.location.LocationService
 import com.yj.weather.logic.model.Place
 
 class PlaceViewModel:ViewModel() {
+
     private val searchLiveData = MutableLiveData<String>()
+    private val locationLiveData = MutableLiveData<Place>()
 
     val placeList = ArrayList<Place>()
 
@@ -15,6 +18,11 @@ class PlaceViewModel:ViewModel() {
         query->Repository.searchPlaces(query)
     }
 
+
+
+    fun startLocation(){
+        LocationService.startLocation()
+    }
     fun searchPlaces(query:String){
         searchLiveData.value = query
     }
