@@ -1,13 +1,11 @@
-package com.yj.weather.arouterservice
+package com.yj.weather
 
 import android.content.Context
-import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.facade.template.IProvider
-import com.alibaba.android.arouter.launcher.ARouter
+import com.yj.weather.arouterservice.ArouterService
 import com.yj.weather.ui.weather.WeatherActivity
 
-@Route(path = "/weather/weatherArouterService")
+@Route(path = Contract.WEATHER_AROUTER_SERVICE)
 class WeatherArouterService: ArouterService {
 
     override fun init(context: Context?) {

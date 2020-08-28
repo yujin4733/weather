@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.yj.weather.Contract
 import com.yj.weather.R
+import com.yj.weather.base.BaseActivity
 import com.yj.weather.logic.location.LocationService
 import com.yj.weather.logic.location.PlaceInterface
 import com.yj.weather.logic.model.Place
@@ -33,7 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Route(path = Contract.WEATHER_ACTIVITY_URL)
-class WeatherActivity : AppCompatActivity(),PlaceInterface {
+class WeatherActivity : BaseActivity(),PlaceInterface {
 
 
     @Autowired(name = "locationLng")
@@ -59,20 +60,18 @@ class WeatherActivity : AppCompatActivity(),PlaceInterface {
         }
     }
 
+    override fun layoutRes() = R.layout.activity_weather
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         ARouter.getInstance().inject(this)
 
-        val decorView = window.decorView
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.statusBarColor = Color.TRANSPARENT
-        setContentView(R.layout.activity_weather)
-
         initView()
         initData()
     }
+
 
     private fun initData() {
         if (viewModel.locationLng.isEmpty()) {
