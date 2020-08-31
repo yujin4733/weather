@@ -26,6 +26,12 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_PHONE_STATE)
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(deniedList, " 核心功能基于这些权限", "OK", "Cancel")
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(deniedList, "进入设置手动允许权限", "OK", "Cancel")
+            }
             .request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
                    "所有申请的权限都已通过".showToast()
