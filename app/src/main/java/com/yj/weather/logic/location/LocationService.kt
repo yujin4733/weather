@@ -6,6 +6,7 @@ import com.amap.api.location.AMapLocationListener
 import com.yj.weather.App
 import com.yj.weather.logic.model.Location
 import com.yj.weather.logic.model.Place
+import com.yj.weather.util.showToast
 
 object LocationService {
 
@@ -68,6 +69,8 @@ object LocationService {
                     location.address
                 )
                 listener?.setPlace(place)
+            }else{
+                location?.errorInfo?.showToast()
             }
         }
 
