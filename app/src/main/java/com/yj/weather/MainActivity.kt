@@ -5,20 +5,15 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import com.permissionx.guolindev.PermissionX
+import com.yj.weather.base.BaseActivity
 import com.yj.weather.util.showToast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val decorView = window.decorView
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.statusBarColor = Color.TRANSPARENT
-        setContentView(R.layout.activity_main)
+    override fun layoutRes() = R.layout.activity_main
 
+    override fun initDate() {
         PermissionX.init(this)
             .permissions(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -34,10 +29,12 @@ class MainActivity : AppCompatActivity() {
             }
             .request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
-                   "所有申请的权限都已通过".showToast()
+                    "所有申请的权限都已通过".showToast()
                 } else {
                     "您拒绝了如下权限：$deniedList".showToast()
                 }
             }
     }
+
+
 }

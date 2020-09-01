@@ -10,10 +10,16 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(layoutRes())
-
+        initView()
+        initDate()
     }
 
     open fun layoutRes() = 0
 
+    open protected fun initView(){
+
+    }
+
+    abstract fun initDate()
 
 }

@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Route(path = Contract.WEATHER_ACTIVITY_URL)
-class WeatherActivity : BaseActivity(),PlaceInterface {
+class WeatherActivity : BaseActivity(), PlaceInterface {
 
 
     @Autowired(name = "locationLng")
@@ -62,18 +62,8 @@ class WeatherActivity : BaseActivity(),PlaceInterface {
 
     override fun layoutRes() = R.layout.activity_weather
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun initDate() {
         ARouter.getInstance().inject(this)
-
-        initView()
-        initData()
-    }
-
-
-    private fun initData() {
         if (viewModel.locationLng.isEmpty()) {
             viewModel.locationLng = lng ?: ""
         }
@@ -94,15 +84,14 @@ class WeatherActivity : BaseActivity(),PlaceInterface {
             }
             swipeRefresh.isRefreshing = false
         })
-        if(viewModel.placeName.equals("当前位置")){
+        if (viewModel.placeName.equals("当前位置")) {
             LocationService.startLocation()
-        }else{
+        } else {
             refreshWeather()
         }
     }
 
-
-    private fun initView() {
+    override fun initView() {
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
         swipeRefresh.setOnRefreshListener { refreshWeather() }
 
