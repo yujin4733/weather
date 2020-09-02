@@ -8,5 +8,6 @@ class Contract {
 
         const val WEATHER_ACTIVITY_URL:String = "/weather/WeatherActivity"
         const val WEATHER_AROUTER_SERVICE:String = "/weather/weatherArouterService"
+        const val MAIN_ACTIVITY:String = "/weather/MainActivity"
     }
 }

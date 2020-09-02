@@ -41,13 +41,13 @@ class PlaceFragment : Fragment() {
 //                putExtra("placeName", place.name)
 //            }
 //            startActivity(intent)
-            ARouter.getInstance().build(Contract.WEATHER_ACTIVITY_URL)
-                .withString("locationLng",place.location.lng)
-                .withString("locationLat",place.location.lat)
-                .withString("placeName",place.name)
-                .navigation()
-            activity?.finish()
-            return
+//            ARouter.getInstance().build(Contract.WEATHER_ACTIVITY_URL)
+//                .withString("locationLng",place.location.lng)
+//                .withString("locationLat",place.location.lat)
+//                .withString("placeName",place.name)
+//                .navigation()
+//            activity?.finish()
+//            return
         }
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager

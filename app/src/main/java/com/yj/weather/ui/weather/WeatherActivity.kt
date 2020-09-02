@@ -3,13 +3,13 @@ package com.yj.weather.ui.weather
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -25,6 +25,7 @@ import com.yj.weather.logic.location.PlaceInterface
 import com.yj.weather.logic.model.Place
 import com.yj.weather.logic.model.Weather
 import com.yj.weather.logic.model.getSky
+import com.yj.weather.util.StatusBarUtil
 import com.yj.weather.util.showToast
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.forecast.*
@@ -35,7 +36,6 @@ import java.util.*
 
 @Route(path = Contract.WEATHER_ACTIVITY_URL)
 class WeatherActivity : BaseActivity(), PlaceInterface {
-
 
     @Autowired(name = "locationLng")
     lateinit var lng: String
@@ -91,7 +91,20 @@ class WeatherActivity : BaseActivity(), PlaceInterface {
         }
     }
 
+    override fun beforeSetContentView()  {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        window.statusBarColor = Color.TRANSPARENT
+    }
+
+    override fun setStatusBar() {
+        //不执行父类的方法
+    }
+
+
     override fun initView() {
+
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
         swipeRefresh.setOnRefreshListener { refreshWeather() }
 
@@ -190,4 +203,6 @@ class WeatherActivity : BaseActivity(), PlaceInterface {
         LocationService.removeListerer()
 
     }
+
+
 }

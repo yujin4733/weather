@@ -33,10 +33,12 @@ android {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"//, "x86","arm64-v8a","x86_64"
         }
+        multiDexEnabled true
+
     }
 
     signingConfigs {
-        debug {
+        myDebug {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
@@ -46,22 +48,29 @@ android {
 
     buildTypes {
         debug {
+            signingConfig signingConfigs.myDebug
             resValue("string", "app_name", "weather_debug")
             buildConfigField("String", "caiyun_token", keystoreProperties['caiyun_token'])
 
             buildConfigField "boolean", "LOG_DEBUG", "true"//是否输出LOG信息
 
             manifestPlaceholders = [
-//                    AMAP_KEY: "426c3b9db9b72a581a5108655608b971"
                     AMAP_KEY: keystoreProperties['amap_key']
             ]
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
 
-
         }
         release {
+            resValue("string", "app_name", "weather")
+            buildConfigField("String", "caiyun_token", keystoreProperties['caiyun_token'])
+
+            buildConfigField "boolean", "LOG_DEBUG", "false"//是否输出LOG信息
+
+            manifestPlaceholders = [
+                AMAP_KEY: keystoreProperties['amap_key']
+            ]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -75,8 +84,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-
+//    lintOptions {
+//        checkReleaseBuilds false
+//        abortOnError false
+//    }
 
 }
 

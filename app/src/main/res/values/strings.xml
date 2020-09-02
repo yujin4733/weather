@@ -1,5 +1,5 @@
 <resources>
-<!--    <string name="app_name">Weather</string>-->
+    <!--    <string name="app_name">Weather</string>-->
     <string name="input_address">输入地址</string>
     <string name="unable_to_get_weather_info">无法成功获取天气信息</string>
 </resources>
