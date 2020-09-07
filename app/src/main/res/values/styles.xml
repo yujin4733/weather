@@ -1,4 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+       <item name="android:windowIsTranslucent">true</item>
+       <item name="android:windowBackground">@android:color/transparent</item>
+       windowIsTranslucent 是false时,一定是不透明；是true时,透明度由windowBackground决定。
+    -->
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -8,4 +13,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SplashThem" parent="AppTheme">
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+
+    </style>
 </resources>

@@ -3,13 +3,13 @@ package com.yj.weather.ui.weather
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -19,11 +19,13 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.yj.weather.Contract
 import com.yj.weather.R
+import com.yj.weather.base.BaseActivity
 import com.yj.weather.logic.location.LocationService
 import com.yj.weather.logic.location.PlaceInterface
 import com.yj.weather.logic.model.Place
 import com.yj.weather.logic.model.Weather
 import com.yj.weather.logic.model.getSky
+import com.yj.weather.util.StatusBarUtil
 import com.yj.weather.util.showToast
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.forecast.*
@@ -33,8 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Route(path = Contract.WEATHER_ACTIVITY_URL)
-class WeatherActivity : AppCompatActivity(),PlaceInterface {
-
+class WeatherActivity : BaseActivity(), PlaceInterface {
 
     @Autowired(name = "locationLng")
     lateinit var lng: String
@@ -59,22 +60,10 @@ class WeatherActivity : AppCompatActivity(),PlaceInterface {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun layoutRes() = R.layout.activity_weather
 
+    override fun initDate() {
         ARouter.getInstance().inject(this)
-
-        val decorView = window.decorView
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.statusBarColor = Color.TRANSPARENT
-        setContentView(R.layout.activity_weather)
-
-        initView()
-        initData()
-    }
-
-    private fun initData() {
         if (viewModel.locationLng.isEmpty()) {
             viewModel.locationLng = lng ?: ""
         }
@@ -95,15 +84,27 @@ class WeatherActivity : AppCompatActivity(),PlaceInterface {
             }
             swipeRefresh.isRefreshing = false
         })
-        if(viewModel.placeName.equals("当前位置")){
+        if (viewModel.placeName.equals("当前位置")) {
             LocationService.startLocation()
-        }else{
+        } else {
             refreshWeather()
         }
     }
 
+    override fun beforeSetContentView()  {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        window.statusBarColor = Color.TRANSPARENT
+    }
 
-    private fun initView() {
+    override fun setStatusBar() {
+        //不执行父类的方法
+    }
+
+
+    override fun initView() {
+
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
         swipeRefresh.setOnRefreshListener { refreshWeather() }
 
@@ -202,4 +203,6 @@ class WeatherActivity : AppCompatActivity(),PlaceInterface {
         LocationService.removeListerer()
 
     }
+
+
 }

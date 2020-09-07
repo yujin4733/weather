@@ -1,12 +1,24 @@
 package com.yj.weather
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.yj.weather.base.BaseActivity
+import com.yj.weather.util.StatusBarUtil
 
-class MainActivity : AppCompatActivity() {
+@Route(path = Contract.MAIN_ACTIVITY)
+class MainActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun layoutRes() = R.layout.activity_main
+
+    override fun initDate() {
+
     }
+
+//    override fun setStatusBar() {
+//        StatusBarUtil.setColor(this, ContextCompat.getColor(this,R.color.colorPrimary), 0)
+//    }
+
+
 }
