@@ -34,12 +34,9 @@ object WeatherNetwork {
     suspend fun getDailyWeather(lng:String,lat:String) = weatherService.getDailyWeather(lng,lat).await()
 
     private suspend fun <T> Call<T>.await(): T {
+        // suspendCoroutine 简化回调的函数
         return suspendCoroutine { continuation ->
             enqueue(object : Callback<T> {
-
-                override fun onFailure(call: Call<T>, t: Throwable) {
-                    continuation.resumeWithException(t)
-                }
 
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     val body = response.body()
@@ -48,6 +45,10 @@ object WeatherNetwork {
                     } else {
                         continuation.resumeWithException(RuntimeException("Response body is null"))
                     }
+                }
+
+                override fun onFailure(call: Call<T>, t: Throwable) {
+                    continuation.resumeWithException(t)
                 }
             })
         }
